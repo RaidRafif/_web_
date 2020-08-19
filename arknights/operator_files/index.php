@@ -1,7 +1,7 @@
 <?php
 
 require 'functions.php';
-$operators = query("SELECT * FROM operators");
+$operator = query("SELECT * FROM operators");
 
 ?>
 
@@ -16,33 +16,31 @@ $operators = query("SELECT * FROM operators");
 
 <body>
 
-  <h1>Operators List</h1>
+  <h1>Operator List</h1>
 
   <table border="1" cellpadding="10" cellspacing="0">
 
     <tr>
-      <!-- tr : Table row -->
-      <th>No.</th> <!-- th : Table heading -->
+      <th>No</th>
       <th>Action</th>
       <th>Image</th>
       <th>Codename</th>
+      <th>Class</th>
     </tr>
 
-    <?= $id = 1; ?>
-    <?php foreach ($operators as $temp) : ?>
+    <?php $id = 0; ?>
+    <?php foreach ($operator as $temp) : ?>
       <tr>
-        <!-- tr : Table row -->
-        <td><?= $id++; ?></td> <!-- td : Table data -->
-        <td>
-          <a href="detail.php?id=<?= $temp['id']; ?>">Detail</a>
-        </td>
-        <td><img src="img/<?= $temp['image'] ?>" width=128></td>
+        <td><?= $id++; ?></td>
+        <td><a href="detail.php?id=<?= $id; ?>">Detail</a></td>
+        <td><img src="img/<?= $temp['image']; ?>" width="128"></td>
         <td><?= $temp['codename']; ?></td>
+        <td><?= $temp['class']; ?></td>
       </tr>
     <?php endforeach; ?>
 
-  </table>
 
+  </table>
 
 </body>
 
