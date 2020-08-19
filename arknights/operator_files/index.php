@@ -1,20 +1,7 @@
 <?php
-// Koneksi dan memilih database
-$db = mysqli_connect('localhost', 'root', '', 'phpbasic');
 
-
-// Query ke tabel dalam database
-$result = mysqli_query($db, "SELECT * FROM operators");
-
-
-// Ubah data ke dalam array
-$ops = [];
-while ($op = mysqli_fetch_assoc($result)) {
-  $ops[] = $op;
-}
-
-// Tampung ke variabel operator
-$operators = $ops;
+require 'functions.php';
+$operators = query("SELECT * FROM operators");
 
 ?>
 
@@ -39,9 +26,6 @@ $operators = $ops;
       <th>Action</th>
       <th>Image</th>
       <th>Codename</th>
-      <th>Class</th>
-      <th>Rate</th>
-      <th>Infection</th>
     </tr>
 
     <?= $id = 1; ?>
@@ -50,13 +34,10 @@ $operators = $ops;
         <!-- tr : Table row -->
         <td><?= $id++; ?></td> <!-- td : Table data -->
         <td>
-          <a href="">Change</a> | <a href="">Delete</a>
+          <a href="detail.php?id=<?= $temp['id']; ?>">Detail</a>
         </td>
         <td><img src="img/<?= $temp['image'] ?>" width=128></td>
         <td><?= $temp['codename']; ?></td>
-        <td><?= $temp['class']; ?></td>
-        <td><?= $temp['rate']; ?></td>
-        <td><?= $temp['infection']; ?></td>
       </tr>
     <?php endforeach; ?>
 
