@@ -32,10 +32,10 @@ $op = query("SELECT * FROM operators WHERE id = $id")
     <li>Height : <?= $op['height']; ?></li>
     <li>Infection : <?= $op['infection']; ?></li>
     <li>
-      <a href="">Change</a> |
-      <a href="">Delete</a>
+      <a href="change.php?id=<?= $op['id']; ?>">Change</a> |
+      <a href="delete.php?id=<?= $op['id']; ?>" onclick="return confirm('Delete file?');">Delete</a>
     </li>
-    <a href="index.php">Back to list</a>
+    <a href=" index.php">Back to list</a>
   </ul>
 
 </body>

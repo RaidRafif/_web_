@@ -43,7 +43,52 @@ function add($data)
   $query = "INSERT INTO operators VALUES 
               (null, '$image', '$codename', '$gender', '$class', '$combat_experience', '$birthplace', '$birthdate', '$race', '$height', '$infection')";
 
-  mysqli_query($db, $query);
+  mysqli_query($db, $query) or die(mysqli_error($db));
+
+  return mysqli_affected_rows($db);
+}
+
+// Function to delete user data
+function delete($id)
+{
+  $db = connection();
+
+  mysqli_query($db, "DELETE FROM operators WHERE id = $id") or die(mysqli_error($db));
+
+  return mysqli_affected_rows($db);
+}
+
+function change($data)
+{
+  $db = connection();
+
+  $id = htmlspecialchars($data['id']);
+  $image = htmlspecialchars($data['image']);
+  $codename = htmlspecialchars($data['codename']);
+  $gender = htmlspecialchars($data['gender']);
+  $class = htmlspecialchars($data['class']);
+  $combat_experience = htmlspecialchars($data['combat_experience']);
+  $birthplace = htmlspecialchars($data['birthplace']);
+  $birthdate = htmlspecialchars($data['birthdate']);
+  $race = htmlspecialchars($data['race']);
+  $height = htmlspecialchars($data['height']);
+  $infection = htmlspecialchars($data['infection']);
+
+  $query = "UPDATE operators SET
+              image = '$image',
+              codename = '$codename',
+              gender = '$gender',
+              class = '$class',
+              combat_experience = '$combat_experience',
+              birthplace = '$birthplace',
+              birthdate = '$birthdate',
+              race = '$race',
+              height = '$height',
+              infection = '$infection'
+            WHERE id = $id;
+            ";
+
+  mysqli_query($db, $query) or die(mysqli_error($db));
 
   return mysqli_affected_rows($db);
 }
