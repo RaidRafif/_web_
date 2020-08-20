@@ -18,6 +18,9 @@ $operator = query("SELECT * FROM operators");
 
   <h1>Operator List</h1>
 
+  <a href="add.php">Add Operator File</a>
+  <br><br>
+
   <table border="1" cellpadding="10" cellspacing="0">
 
     <tr>
@@ -28,17 +31,17 @@ $operator = query("SELECT * FROM operators");
       <th>Class</th>
     </tr>
 
-    <?php $id = 0; ?>
+    <?php $id = 1; ?>
     <?php foreach ($operator as $temp) : ?>
       <tr>
-        <td><?= $id++; ?></td>
-        <td><a href="detail.php?id=<?= $id; ?>">Detail</a></td>
+        <td><?= $id; ?></td>
+        <td><a href="detail.php?id=<?= $temp['id']; ?>">Detail</a></td>
         <td><img src="img/<?= $temp['image']; ?>" width="128"></td>
         <td><?= $temp['codename']; ?></td>
         <td><?= $temp['class']; ?></td>
       </tr>
+      <?php $id++; ?>
     <?php endforeach; ?>
-
 
   </table>
 

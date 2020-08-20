@@ -31,9 +31,12 @@ $op = query("SELECT * FROM operators WHERE id = $id")
     <li>Race : <?= $op['race']; ?></li>
     <li>Height : <?= $op['height']; ?></li>
     <li>Infection : <?= $op['infection']; ?></li>
+    <li>
+      <a href="">Change</a> |
+      <a href="">Delete</a>
+    </li>
+    <a href="index.php">Back to list</a>
   </ul>
-
-
 
 </body>
 
