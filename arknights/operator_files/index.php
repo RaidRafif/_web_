@@ -3,6 +3,11 @@
 require 'functions.php';
 $operator = query("SELECT * FROM operators");
 
+// Check search button
+if (isset($_POST['search'])) {
+  $operator = search($_POST['keyword']);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +35,19 @@ $operator = query("SELECT * FROM operators");
       <th>Codename</th>
       <th>Class</th>
     </tr>
+
+    <form action="" method="POST">
+      <input type="text" name="keyword" size='36' placeholder="Enter operator codename" autocomplete="off" autofocus>
+      <button type='submit' name='search'> Search </button>
+    </form>
+
+    <?php if (empty($operator)) : ?>
+      <tr>
+        <td colspan="5">
+          <p style="font-style: italic; text-align: center;">Operator file not found</p>
+        </td>
+      </tr>
+    <?php endif; ?>
 
     <?php $id = 1; ?>
     <?php foreach ($operator as $temp) : ?>

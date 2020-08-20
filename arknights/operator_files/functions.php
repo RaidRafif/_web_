@@ -92,3 +92,22 @@ function change($data)
 
   return mysqli_affected_rows($db);
 }
+
+function search($keyword)
+{
+  $db = connection();
+
+  $query = "SELECT * FROM operators WHERE
+              codename LIKE '%$keyword%' OR
+              class LIKE '$keyword%'
+            ";
+
+  $result = mysqli_query($db, $query);
+
+  $ops = [];
+  while ($op = mysqli_fetch_assoc($result)) {
+    $ops[] = $op;
+  }
+
+  return $ops;
+}
