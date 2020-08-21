@@ -121,16 +121,73 @@ function login($data)
   $username = htmlspecialchars($data['username']);
   $password = htmlspecialchars($data['password']);
 
-  if (query("SELECT * FROM users WHERE codename = '$username' && password = '$password'")) {
-    // Setting up Session
-    $_SESSION['login'] = true;
+  if ($user = query("SELECT * FROM users WHERE codename = '$username'")) {
+    if (password_verify($password, $user['password'])) {
+      // Setting up Session
+      $_SESSION['login'] = true;
 
-    header('Location: index.php');
-    exit;
-  } else {
-    return [
-      'error' => true,
-      'message' => 'Wrong username/password'
-    ];
+      header('Location: index.php');
+      exit;
+    }
   }
+  return [
+    'error' => true,
+    'message' => 'Wrong username/password'
+  ];
+}
+
+// Registration Function
+function registration($data)
+{
+  $db = connection();
+
+  $codename = htmlspecialchars(strtolower($data['codename']));
+  $password_1 = mysqli_real_escape_string($db, $data['password_1']);
+  $password_2 = mysqli_real_escape_string($db, $data['password_2']);
+
+  // Check if the form empty or not
+  if (empty($codename) || empty($password_1) || empty($password_2)) {
+    echo "<script>
+              alert('Codename/password required');
+              document.location.href = 'registration.php';
+          </script>";
+    return false;
+  }
+
+  // Check whether codename unique
+  if (query("SELECT * FROM users WHERE codename = '$codename'")) {
+    echo "<script>
+            alert('Codename already registered');
+            document.location.href = 'registration.php';
+          </script>";
+    return false;
+  }
+
+  // Check whether password_1 === password_2
+  if ($password_1 !== $password_2) {
+    echo "<script>
+            alert('Password does not match');
+            document.location.href = 'registration.php';
+          </script>";
+    return false;
+  }
+
+  // Check minimum password
+  if (strlen($password_1) < 8) {
+    echo "<script>
+            alert('Password too short, minimum 8 digit');
+            document.location.href = 'registration.php';
+          </script>";
+    return false;
+  }
+
+  // Codename/password valid. Encrypt password
+  $new_password = password_hash($password_1, PASSWORD_DEFAULT);
+
+  $query = "INSERT INTO users VALUES
+              (null, '$codename', '$new_password')";
+
+  mysqli_query($db, $query) or die(mysqli_error($db));
+
+  return mysqli_affected_rows($db);
 }

@@ -50,6 +50,7 @@ if (isset($_POST['login'])) {
 
       <br>
       <button type="submit" name="login"> Login </button>
+      <button><a href="registration.php"> Sign up </a></button>
     </ul>
 
   </form>
