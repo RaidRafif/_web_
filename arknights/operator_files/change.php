@@ -1,6 +1,13 @@
 <?php
 
+session_start();
+if (!isset($_SESSION['login'])) { // Check if SESSION still running
+  header('Location: login.php');
+  exit;
+}
+
 require 'functions.php';
+
 $id = $_GET['id'];
 
 $op = query("SELECT * FROM operators WHERE id = $id");

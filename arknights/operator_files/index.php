@@ -1,5 +1,11 @@
 <?php
 
+session_start();
+if (!isset($_SESSION['login'])) { // Check if SESSION still running
+  header('Location: login.php');
+  exit;
+}
+
 require 'functions.php';
 $operator = query("SELECT * FROM operators");
 
@@ -20,7 +26,7 @@ if (isset($_POST['search'])) {
 </head>
 
 <body>
-
+  <a href="logout.php">Log out</a>
   <h1>Operator List</h1>
 
   <a href="add.php">Add Operator File</a>

@@ -111,3 +111,26 @@ function search($keyword)
 
   return $ops;
 }
+
+// Login functions
+function login($data)
+{
+
+  $db = connection();
+
+  $username = htmlspecialchars($data['username']);
+  $password = htmlspecialchars($data['password']);
+
+  if (query("SELECT * FROM users WHERE codename = '$username' && password = '$password'")) {
+    // Setting up Session
+    $_SESSION['login'] = true;
+
+    header('Location: index.php');
+    exit;
+  } else {
+    return [
+      'error' => true,
+      'message' => 'Wrong username/password'
+    ];
+  }
+}
