@@ -38,14 +38,15 @@ if (isset($_POST['submit'])) {
 
   <h1>Add Operator File</h1>
 
-  <form action="" method="POST">
+  <form action="" method="POST" enctype="multipart/form-data">
 
     <ul>
       <li>
         <label>
           Image :
-          <input type="text" name="image">
+          <input type="file" name="image" class="image" onchange="previewImage()">
         </label>
+        <img src="img/default.jpg" style="display: block;" class="image_preview" width="128">
       </li>
 
       <li>
@@ -120,9 +121,7 @@ if (isset($_POST['submit'])) {
 
   </form>
 
-
-
-
+  <script src="js/script.js"></script>
 </body>
 
 </html>

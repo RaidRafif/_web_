@@ -11,3 +11,15 @@ keyword.addEventListener('keyup', function () {
     .then((response) => response.text())
     .then((response) => (container.innerHTML = response));
 });
+
+// previewImage() functions
+function previewImage() {
+  const image = document.querySelector('.image');
+  const imagePreview = document.querySelector('.image_preview');
+
+  const oFReader = new FileReader();
+  oFReader.readAsDataURL(image.files[0]);
+  oFReader.onload = function (oFREvent) {
+    imagePreview.src = oFREvent.target.result;
+  }
+}

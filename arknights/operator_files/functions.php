@@ -1,12 +1,12 @@
 <?php
 
-// Function to connect to database
+// Connection database function
 function connection()
 {
   return mysqli_connect('localhost', 'root', '', 'phpbasic');
 }
 
-// Function to query
+// Query function
 function query($query)
 {
   $db = connection();
@@ -24,12 +24,16 @@ function query($query)
   return $ops;
 }
 
-// Function to add user input data to database
+// Add user input to database function
 function add($data)
 {
   $db = connection();
 
-  $image = htmlspecialchars($data['image']);
+  $image = upload();
+  if (!$image) {
+    return false;
+  }
+
   $codename = htmlspecialchars($data['codename']);
   $gender = htmlspecialchars($data['gender']);
   $class = htmlspecialchars($data['class']);
@@ -48,22 +52,79 @@ function add($data)
   return mysqli_affected_rows($db);
 }
 
-// Function to delete user data
+// Upload function
+function upload()
+{
+  $name_file = $_FILES['image']['name'];
+  $type_file = $_FILES['image']['type'];
+  $size_file = $_FILES['image']['size'];
+  $error_file = $_FILES['image']['error'];
+  $tmp_file = $_FILES['image']['tmp_name'];
+
+  // Check whether there is image
+  if ($error_file == 4) {
+    return 'default.jpg';
+  }
+
+  // Check extensions file
+  $ext_list = ["jpeg", "jpg", "png"];
+  $ext_file = strtolower(pathinfo($name_file, PATHINFO_EXTENSION));
+  if (!in_array($ext_file, $ext_list)) {
+    echo "<script>
+            alert('jpg/jpeg/png extensions only allowed');
+          </script>";
+    return false;
+  }
+
+  // Check type files
+  if ($type_file != 'image/jpeg' && $type_file != 'image/png') {
+    echo "<script>
+            alert('Please only upload images file');
+          </script>";
+    return false;
+  }
+
+  // Check size file
+  if ($size_file > 10000000) {
+    echo "<script>
+            alert('File\'s size too big. Maximum 10MB');
+          </script>";
+    return false;
+  }
+
+  // File validated. Generating new file name and move from temporary
+  $new_image = uniqid();
+  $new_image .= '.';
+  $new_image .= $ext_file;
+  move_uploaded_file($tmp_file, 'img/' . $new_image);
+
+  return $new_image;
+}
+
+
+// Delete user data function
 function delete($id)
 {
   $db = connection();
+
+  // Deleting data from folder img
+  $op = query("SELECT * FROM operators WHERE id = $id");
+  if ($op['image'] != 'default.jpg') {
+    unlink('img/' . $op['image']);
+  }
 
   mysqli_query($db, "DELETE FROM operators WHERE id = $id") or die(mysqli_error($db));
 
   return mysqli_affected_rows($db);
 }
 
+// Change data function
 function change($data)
 {
   $db = connection();
 
   $id = htmlspecialchars($data['id']);
-  $image = htmlspecialchars($data['image']);
+  $old_image = htmlspecialchars($data['old_image']);
   $codename = htmlspecialchars($data['codename']);
   $gender = htmlspecialchars($data['gender']);
   $class = htmlspecialchars($data['class']);
@@ -73,6 +134,15 @@ function change($data)
   $race = htmlspecialchars($data['race']);
   $height = htmlspecialchars($data['height']);
   $infection = htmlspecialchars($data['infection']);
+
+  $image = upload();
+  if (!$image) {
+    return false;
+  }
+
+  if ($image == 'default.jpg') {
+    $image = $old_image;
+  }
 
   $query = "UPDATE operators SET
               image = '$image',
@@ -93,6 +163,7 @@ function change($data)
   return mysqli_affected_rows($db);
 }
 
+// Search data function
 function search($keyword)
 {
   $db = connection();

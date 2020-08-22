@@ -48,16 +48,18 @@ if (!isset($_GET['id'])) {
 
   <h1>Change Operator File</h1>
 
-  <form action="" method="POST">
+  <form action="" method="POST" enctype="multipart/form-data">
 
     <input type="hidden" name="id" value="<?= $op['id']; ?>">
 
     <ul>
       <li>
+        <input type="hidden" name="old_image" value="<?= $op['image']; ?>">
         <label>
           Image :
-          <input type="text" name="image">
+          <input type="file" name="image" class="image" onchange="previewImage()">
         </label>
+        <img src="img/<?= $op['image']; ?>" style="display: block;" class="image_preview" width="128">
       </li>
 
       <li>
@@ -123,7 +125,7 @@ if (!isset($_GET['id'])) {
         </label>
       </li>
 
-      <button type="submit" name="change">Add File</button>
+      <button type="submit" name="change">Change File</button>
       <br><br>
       <a href="index.php">Back to list</a>
 
@@ -132,8 +134,7 @@ if (!isset($_GET['id'])) {
 
   </form>
 
-
-
+  <script src="js/script.js"></script>
 
 </body>
 
